@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Exam</string>
+    <string name="loading_title">Loading</string>
+    <string name="loading_message"> Loading weather items, please wait...</string>
 </resources>

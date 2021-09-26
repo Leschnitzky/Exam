@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".ui.MainActivity">
 
 
     <com.google.android.material.card.MaterialCardView
@@ -16,13 +16,13 @@
         app:layout_constraintEnd_toStartOf="@+id/right_main_screen_guideline"
         app:layout_constraintStart_toStartOf="@+id/left_main_screen_guideline"
         app:layout_constraintTop_toTopOf="@+id/card_view_section_main_screen"
-        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MaterialCardView.Cut" >
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MaterialCardView.Cut">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/weather_recycler_view_main_screen"
-            android:padding="8dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:padding="8dp" />
     </com.google.android.material.card.MaterialCardView>
 
     <androidx.constraintlayout.widget.Guideline
@@ -55,58 +55,113 @@
 
     <LinearLayout
         android:id="@+id/temperature_layout"
-        android:layout_width="100dp"
-        android:layout_height="75dp"
-        android:layout_marginBottom="28dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
         android:text="Temperature Layout"
         app:layout_constraintBottom_toTopOf="@+id/materialCardView2"
         app:layout_constraintEnd_toStartOf="@+id/daily_max_min_layout"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        android:orientation="vertical" >
+        app:layout_constraintStart_toStartOf="parent">
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/current_temp"
-            android:layout_gravity="center"
-            android:textStyle="bold"
-            android:textSize="36sp"
             style="@style/TextAppearance.AppCompat.Title"
-            android:text="28c"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="28c"
+            android:textSize="68sp"
+            android:textStyle="bold" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/temp_description"
-            android:layout_gravity="center"
-            android:textStyle="bold"
-            android:textSize="14sp"
             style="@style/TextAppearance.AppCompat.Title"
-            android:text="מעונן חלקית"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="מעונן חלקית"
+            android:textSize="18sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
-    <TextView
+    <LinearLayout
         android:id="@+id/daily_max_min_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="64dp"
+        android:layout_width="50dp"
+        android:layout_height="75dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginBottom="32dp"
+        android:gravity="center"
+        android:orientation="vertical"
         android:text="Daily Max Min Layout"
         app:layout_constraintBottom_toTopOf="@+id/materialCardView2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/temperature_layout" />
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toEndOf="@+id/temperature_layout">
 
-    <TextView
+        <TextView
+            android:id="@+id/current_max_temp"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="32c"
+
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?attr/colorOnSurface" />
+
+
+        <TextView
+            android:id="@+id/current_min_temp"
+            style="@style/TextAppearance.AppCompat.Title"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="18c"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/location_and_time_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:text="Location and Time Layout
 "
         app:layout_constraintBottom_toTopOf="@+id/daily_max_min_layout"
         app:layout_constraintEnd_toStartOf="@+id/right_main_screen_guideline"
         app:layout_constraintStart_toStartOf="@+id/left_main_screen_guideline"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.387" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/current_location"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="הוד השרון"
+            android:textSize="32sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/current_time"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="15:30 , שני
+"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
