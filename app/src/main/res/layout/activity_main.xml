@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/materialCardView2"
+        android:layout_width="0dp"
+
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom__main_screen"
+        app:layout_constraintEnd_toStartOf="@+id/right_main_screen_guideline"
+        app:layout_constraintStart_toStartOf="@+id/left_main_screen_guideline"
+        app:layout_constraintTop_toTopOf="@+id/card_view_section_main_screen"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MaterialCardView.Cut" >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/weather_recycler_view_main_screen"
+            android:padding="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/left_main_screen_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/right_main_screen_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/card_view_section_main_screen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.25" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottom__main_screen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <LinearLayout
+        android:id="@+id/temperature_layout"
+        android:layout_width="100dp"
+        android:layout_height="75dp"
+        android:layout_marginBottom="28dp"
+        android:text="Temperature Layout"
+        app:layout_constraintBottom_toTopOf="@+id/materialCardView2"
+        app:layout_constraintEnd_toStartOf="@+id/daily_max_min_layout"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="vertical" >
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/current_temp"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:textSize="36sp"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:text="28c"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/temp_description"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:text="מעונן חלקית"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/daily_max_min_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="64dp"
+        android:text="Daily Max Min Layout"
+        app:layout_constraintBottom_toTopOf="@+id/materialCardView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/temperature_layout" />
+
+    <TextView
+        android:id="@+id/location_and_time_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location and Time Layout
+"
+        app:layout_constraintBottom_toTopOf="@+id/daily_max_min_layout"
+        app:layout_constraintEnd_toStartOf="@+id/right_main_screen_guideline"
+        app:layout_constraintStart_toStartOf="@+id/left_main_screen_guideline"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.387" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
