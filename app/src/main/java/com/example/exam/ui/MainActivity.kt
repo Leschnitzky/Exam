@@ -1,11 +1,10 @@
 package com.example.exam.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.exam.databinding.ActivityMainBinding
-import com.example.exam.model.WeatherItem
+import com.example.exam.model.RecyclerWeatherItem
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -14,6 +13,9 @@ import androidx.activity.ComponentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.exam.R
+import com.example.exam.data.retrofit.model.CurrentWeatherAPIResponse
+import com.example.exam.ui.adapters.WeatherRecyclerViewAdapter
+import java.time.Instant
 
 
 @AndroidEntryPoint
@@ -36,13 +38,17 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun setupUI(binding: ActivityMainBinding) {
+        observeClock()
         initRecyclerView(binding)
         observeWeatherItems()
     }
 
+    private fun observeClock() {
+    }
+
     private fun initRecyclerView(binding: ActivityMainBinding) {
         recyclerView = binding.weatherRecyclerViewMainScreen
-        recyclerViewAdapter = WeatherRecyclerViewAdapter(listOf())
+        recyclerViewAdapter = WeatherRecyclerViewAdapter(listOf(),this)
         recyclerView.layoutManager = LinearLayoutManager(this);
         recyclerView.adapter = recyclerViewAdapter
     }
@@ -50,20 +56,26 @@ class MainActivity : ComponentActivity() {
     private fun observeWeatherItems() {
         lifecycleScope.launch {
             viewModel.weatherItemsFlow.collect {
-                if(it.isEmpty()){
+                if(it.currentWeatherAPIResponse == null){
                     showLoadingDialog()
                 } else {
                     dismissLoadingDialog()
-                    loadUI(it)
+                    loadUI(it.currentWeatherAPIResponse,it.list)
                 }
             }
         }
     }
 
-    private fun loadUI(it: List<WeatherItem>) {
-        recyclerViewAdapter = WeatherRecyclerViewAdapter(it)
+    private fun loadUI(currentWeather: CurrentWeatherAPIResponse, list: List<RecyclerWeatherItem>) {
+        recyclerViewAdapter = WeatherRecyclerViewAdapter(list,this)
         recyclerView.adapter = recyclerViewAdapter
         recyclerView.invalidate()
+
+        binding.currentTemp.text = currentWeather.main.temp.toInt().toString() + "c"
+        binding.currentLocation.text = currentWeather.name
+        binding.currentMaxTemp.text = currentWeather.main.tempMax.toInt().toString()
+        binding.currentMinTemp.text = currentWeather.main.tempMin.toInt().toString()
+        binding.tempDescription.text = currentWeather.weather[0].description
     }
 
     fun showLoadingDialog() {
