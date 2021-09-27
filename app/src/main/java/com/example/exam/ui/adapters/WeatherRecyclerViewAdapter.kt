@@ -3,6 +3,7 @@ package com.example.exam.ui.adapters
 import android.content.Context
 import android.icu.lang.UCharacter.JoiningGroup.HE
 import android.icu.lang.UScript.HEBREW
+import android.util.Log
 
 import android.view.LayoutInflater
 import android.view.View
@@ -29,6 +30,8 @@ class WeatherRecyclerViewAdapter(
      * (custom ViewHolder).
      */
     class ViewHolder(val binding: RecyclerViewItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        private  val TAG = "WeatherRecyclerViewAdap"
+
         fun bind(weatherItem: RecyclerWeatherItem, context: Context) {
             binding.root.setOnClickListener(object : View.OnClickListener {
                 override fun onClick(p0: View?) {

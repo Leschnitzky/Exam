@@ -1,17 +1,21 @@
 package com.example.exam.ui.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.exam.databinding.InnerRecyclerViewItemBinding
 import com.example.exam.model.InnerRecyclerWeatherItem
-
 class InnerRecyclerViewAdapter (private val dataSet: List<InnerRecyclerWeatherItem>) :
     RecyclerView.Adapter<InnerRecyclerViewAdapter.ViewHolder>()  {
 
     class ViewHolder(val binding: InnerRecyclerViewItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(weatherItem: InnerRecyclerWeatherItem){
+        private  val TAG = "InnerRecyclerViewAdapter"
 
+        fun bind(weatherItem: InnerRecyclerWeatherItem){
+            Log.d(TAG, "bind: ${weatherItem.hour}")
+            binding.innerRecViewTime.text = weatherItem.hour
+            binding.innerRecDailyTemp.text = weatherItem.tempInCelcius.toInt().toString()
         }
     }
     override fun onCreateViewHolder(

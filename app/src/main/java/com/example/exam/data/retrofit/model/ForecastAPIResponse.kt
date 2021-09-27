@@ -86,7 +86,7 @@ data class Current(
 	val visibility: Int,
 
 	@field:SerializedName("uvi")
-	val uvi: Int,
+	val uvi: Double,
 
 	@field:SerializedName("pressure")
 	val pressure: Int,

@@ -7,3 +7,4 @@ val hodHaSharonLon = "34.7722"
 
 
 val MINUTE = 1000 * 60
+val DAY = MINUTE * 60 * 24

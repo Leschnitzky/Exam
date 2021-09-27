@@ -1,5 +1,6 @@
 package com.example.exam.ui
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.exam.data.Repository
@@ -13,12 +14,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import okhttp3.Dispatcher
 import javax.inject.Inject
+import kotlin.math.log
 
 @HiltViewModel
 class WeatherViewModel @Inject constructor(
     repository: Repository
 ) : ViewModel() {
-
+    private val TAG = "WeatherViewModel"
     val weatherItemsFlow: StateFlow<WeatherData>
         get() = _weatherItemsFlow
     private val _weatherItemsFlow = MutableStateFlow(WeatherData(null, listOf()))
@@ -28,14 +30,16 @@ class WeatherViewModel @Inject constructor(
 
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                    repository.getCurrentWeatherData().also {
-                        withContext(Dispatchers.Main){
-                            _weatherItemsFlow.value = WeatherData(it,repository.getRetrofitData())
+                repository.getCurrentWeatherData().also { currentData ->
+                    repository.getRetrofitData().also {
+                        withContext(Dispatchers.Main) {
+                            _weatherItemsFlow.value = WeatherData(currentData, it)
                         }
                     }
+                }
 
             }
+
         }
     }
-
 }

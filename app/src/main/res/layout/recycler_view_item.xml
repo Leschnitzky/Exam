@@ -49,28 +49,31 @@
         android:layout_margin="16dp"
         android:background="?attr/colorOnSurface" />
 
-    <LinearLayout
-        android:visibility="gone"
-        android:id="@+id/rec_view_layout"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_margin="16dp"
-        android:orientation="horizontal">
-
-        <View
-            android:layout_marginLeft="32dp"
-            android:layout_weight="2"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@android:color/background_dark" />
-
-        <androidx.recyclerview.widget.RecyclerView
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/rec_view_layout"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
             android:layout_margin="16dp"
-            android:layout_weight="200"
-            android:id="@+id/inner_rec_view"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-             />
-    </LinearLayout>
+            android:orientation="horizontal">
+
+            <View
+                android:layout_marginLeft="32dp"
+                android:layout_weight="2"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/background_dark" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_margin="16dp"
+                android:layout_weight="200"
+                android:id="@+id/inner_rec_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>
