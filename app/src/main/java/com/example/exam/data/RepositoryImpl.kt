@@ -10,14 +10,16 @@ class RepositoryImpl @Inject constructor(
     val retrofitService: WeatherRetrofitService
 ): Repository {
     private val TAG = "RepositoryImpl"
-    override suspend fun getRetrofitData(): List<RecyclerWeatherItem> {
-        val array =  RecyclerWeatherItem.FromForecastAPI(retrofitService.getAPIResponseForLatLong())
+    override suspend fun getRetrofitData(lat: String, lon: String): List<RecyclerWeatherItem> {
+        val array =  RecyclerWeatherItem.FromForecastAPI(retrofitService.getAPIResponseForLatLong(lat = lat, lon = lon))
         Log.d(TAG, "getRetrofitData: $array")
         return array
     }
 
-    override suspend fun getCurrentWeatherData(): CurrentWeatherAPIResponse {
-        Log.d(TAG, "getCurrentWeatherData: ")
-        return retrofitService.getCurrentWeather()
+    override suspend fun getCurrentWeatherData(
+        cityName: String
+    ): CurrentWeatherAPIResponse {
+        return retrofitService.getCurrentWeather(cityName = cityName)
     }
+
 }

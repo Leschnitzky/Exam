@@ -102,7 +102,7 @@
         app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="parent">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/current_max_temp"
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="wrap_content"
@@ -118,7 +118,7 @@
             android:background="?attr/colorOnSurface" />
 
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/current_min_temp"
             style="@style/TextAppearance.AppCompat.Title"
 

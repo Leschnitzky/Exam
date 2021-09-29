@@ -23,7 +23,7 @@ interface WeatherRetrofitService {
 
     @GET("weather")
     suspend fun getCurrentWeather(
-        @Query("id") lat: String = hodHaSharonCityID,
+        @Query("q") cityName: String = hodHaSharonCityID,
         @Query("appid") appId: String = apiKey,
         @Query("units") units: String = "metric",
         @Query("lang") lang: String = "he"

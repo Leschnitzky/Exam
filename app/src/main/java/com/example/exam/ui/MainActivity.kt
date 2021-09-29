@@ -1,5 +1,6 @@
 package com.example.exam.ui
 
+import android.Manifest
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -9,6 +10,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import android.app.ProgressDialog
+import android.content.Context
+import android.content.pm.PackageManager
+import android.location.Address
 import androidx.activity.ComponentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,15 +27,22 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
-import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
+import android.location.Geocoder
+import android.location.Location
+import android.util.Log
+import java.util.*
+import android.location.LocationManager
+import androidx.activity.result.contract.ActivityResultContracts
 
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private val TAG = "MainActivity"
     private lateinit var binding: ActivityMainBinding
     val viewModel: WeatherViewModel by viewModels()
     private var progress: ProgressDialog? = null
+    private var userDeniedPermission = false;
     private lateinit var recyclerView: RecyclerView
     private lateinit var recyclerViewAdapter: WeatherRecyclerViewAdapter
     private lateinit var scheduleTaskExecutor : ScheduledExecutorService
@@ -48,13 +59,37 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun setupUI(binding: ActivityMainBinding) {
-        observeClock()
+        requestPermissionsForApp()
+        createClock()
         initRecyclerView(binding)
         observeWeatherItems()
     }
 
-    private fun observeClock() {
-        // Since we just need it to run when application is live, we can destroy the TimerTask on OnDestroy no need for alarm managers and such
+    private fun requestPermissionsForApp() {
+        val requestPermissionLauncher =
+            registerForActivityResult(
+                ActivityResultContracts.RequestPermission(
+
+                )
+            ) { isGranted: Boolean ->
+                if (isGranted) {
+                }
+                else {
+                    Toast.makeText(this, "App needs location permission in order to function properly" , Toast.LENGTH_LONG).show()
+                    userDeniedPermission = true
+                }
+            }
+
+        if(!userDeniedPermission){
+            requestPermissionLauncher.launch(
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+        }
+
+    }
+
+    private fun createClock() {
+        // Since we just need it to run when application is live, we can destroy the digital clock on OnDestroy
         scheduleTaskExecutor = Executors.newScheduledThreadPool(5)
         scheduleTaskExecutor.scheduleAtFixedRate(Runnable {
             runOnUiThread {
@@ -79,6 +114,32 @@ class MainActivity : ComponentActivity() {
         recyclerViewAdapter = WeatherRecyclerViewAdapter(listOf(),this)
         recyclerView.layoutManager = LinearLayoutManager(this);
         recyclerView.adapter = recyclerViewAdapter
+
+        initDataViaLocation()
+    }
+
+    private fun initDataViaLocation() {
+        if(checkSelfPermission(
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED){
+            val lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            val location: Location? = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            val longitude: Double = location!!.longitude
+            val latitude: Double = location!!.latitude
+
+            val geo = Geocoder(this.applicationContext, Locale("iw") )
+            val addresses: List<Address> = geo.getFromLocation(latitude, longitude, 1)
+
+            Log.d(TAG, "initDataViaLocation: $addresses")
+            lifecycleScope.launch {
+                viewModel.getCurrentDataForLatLong(
+                    longitude.toString(),
+                    latitude.toString(),
+                    addresses.first().locality
+                )
+            }
+        }
+
     }
 
     private fun observeWeatherItems() {
