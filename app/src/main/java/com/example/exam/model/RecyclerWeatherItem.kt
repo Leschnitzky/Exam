@@ -10,7 +10,8 @@ data class RecyclerWeatherItem(
     val dateTimestamp: Int,
     val maxTempInCelcius: Double,
     val minTempInCelcius: Double,
-    val hourlyData: ArrayList<InnerRecyclerWeatherItem>
+    val hourlyData: ArrayList<InnerRecyclerWeatherItem>,
+    var isRecyclerViewOpened : Boolean = false
 ) {
     companion object {
         private const val TAG = "RecyclerWeatherItem"

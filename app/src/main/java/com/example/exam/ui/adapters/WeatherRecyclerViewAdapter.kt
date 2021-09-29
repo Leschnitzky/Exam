@@ -1,9 +1,6 @@
 package com.example.exam.ui.adapters
 
 import android.content.Context
-import android.icu.lang.UCharacter.JoiningGroup.HE
-import android.icu.lang.UScript.HEBREW
-import android.util.Log
 
 import android.view.LayoutInflater
 import android.view.View
@@ -13,19 +10,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.exam.databinding.RecyclerViewItemBinding
 import com.example.exam.model.RecyclerWeatherItem
 import com.example.exam.utils.getLocalizedName
-import java.lang.Character.UnicodeBlock.HEBREW
 import java.time.Instant
 import java.time.ZoneId
-import java.time.format.TextStyle
-import java.util.*
 
 class WeatherRecyclerViewAdapter(
-    private val dataSet: List<RecyclerWeatherItem>,
+    val dataSet: List<RecyclerWeatherItem>,
     private val context: Context
 ) :
     RecyclerView.Adapter<WeatherRecyclerViewAdapter.ViewHolder>() {
-    var previouslyOpenedView: RecyclerViewItemBinding? = null
-
     /**
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder).
@@ -33,16 +25,18 @@ class WeatherRecyclerViewAdapter(
     class ViewHolder(val binding: RecyclerViewItemBinding) : RecyclerView.ViewHolder(binding.root) {
         private  val TAG = "WeatherRecyclerViewAdap"
 
-        fun bind(weatherItem: RecyclerWeatherItem, context: Context) {
+        fun bind(
+            weatherItem: RecyclerWeatherItem,
+            context: Context,
+            adapter: WeatherRecyclerViewAdapter,
+        ) {
             binding.root.setOnClickListener(object : View.OnClickListener {
                 override fun onClick(p0: View?) {
-
-                    if (binding.recViewLayout.visibility == View.GONE) {
-
-                        binding.recViewLayout.visibility = View.VISIBLE
-                    } else {
-                        binding.recViewLayout.visibility = View.GONE
+                    adapter.dataSet.forEach {
+                        it.isRecyclerViewOpened = false;
                     }
+                    weatherItem.isRecyclerViewOpened = true
+                    adapter.notifyDataSetChanged()
                 }
             })
             val innerRecyclerViewAdapter = InnerRecyclerViewAdapter(weatherItem.hourlyData)
@@ -55,8 +49,12 @@ class WeatherRecyclerViewAdapter(
                 Instant.ofEpochSecond(weatherItem.dateTimestamp.toLong())
                 .atZone(ZoneId.systemDefault())
                 .toLocalDateTime().dayOfWeek.name)
-
-
+            binding.recViewLayout.visibility =
+                if(weatherItem.isRecyclerViewOpened) {
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
         }
 
 
@@ -70,7 +68,6 @@ class WeatherRecyclerViewAdapter(
             viewGroup,
             false
         )
-        previouslyOpenedView = itemBinding
         return ViewHolder(itemBinding)
     }
 
@@ -80,7 +77,7 @@ class WeatherRecyclerViewAdapter(
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
         val weatherItem: RecyclerWeatherItem = dataSet[position]
-        viewHolder.bind(weatherItem, context)
+        viewHolder.bind(weatherItem, context, this)
     }
 
     // Return the size of your dataset (invoked by the layout manager)
