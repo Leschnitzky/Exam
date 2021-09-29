@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.exam.databinding.RecyclerViewItemBinding
 import com.example.exam.model.RecyclerWeatherItem
+import com.example.exam.utils.getLocalizedName
 import java.lang.Character.UnicodeBlock.HEBREW
 import java.time.Instant
 import java.time.ZoneId
@@ -58,18 +59,6 @@ class WeatherRecyclerViewAdapter(
 
         }
 
-        private fun getLocalizedName(name: String): CharSequence? {
-            when(name){
-                "SUNDAY" -> return "ראשון"
-                "MONDAY" -> return "שני"
-                "TUESDAY" -> return "שלישי"
-                "WEDNESDAY" -> return "רביעי"
-                "THURSDAY" -> return "חמישי"
-                "FRIDAY" -> return "שישי"
-                "SATURDAY" -> return "שבת"
-                else -> return "N/A"
-            }
-        }
 
     }
 

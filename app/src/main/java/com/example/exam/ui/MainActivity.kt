@@ -16,6 +16,15 @@ import com.example.exam.R
 import com.example.exam.data.retrofit.model.CurrentWeatherAPIResponse
 import com.example.exam.ui.adapters.WeatherRecyclerViewAdapter
 import java.time.Instant
+import android.widget.Toast
+import com.example.exam.utils.getLocalizedName
+import java.lang.StringBuilder
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.concurrent.Executors
+import java.util.concurrent.ScheduledExecutorService
+import java.util.concurrent.ThreadPoolExecutor
+import java.util.concurrent.TimeUnit
 
 
 @AndroidEntryPoint
@@ -25,6 +34,7 @@ class MainActivity : ComponentActivity() {
     private var progress: ProgressDialog? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var recyclerViewAdapter: WeatherRecyclerViewAdapter
+    private lateinit var scheduleTaskExecutor : ScheduledExecutorService
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +54,24 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun observeClock() {
+        // Since we just need it to run when application is live, we can destroy the TimerTask on OnDestroy no need for alarm managers and such
+        scheduleTaskExecutor = Executors.newScheduledThreadPool(5)
+        scheduleTaskExecutor.scheduleAtFixedRate(Runnable {
+            runOnUiThread {
+                val currentTime = System.currentTimeMillis()
+                val date = Instant.ofEpochSecond(currentTime / 1000)
+                    .atZone(ZoneId.systemDefault())
+                binding.currentTime.text =
+                    StringBuilder()
+                        .append(date.format(DateTimeFormatter.ofPattern("kk:mm")))
+                        .append(", ")
+                        .append(getLocalizedName(date.dayOfWeek.name))
+                        .toString()
+
+            }
+        }, 0, 1, TimeUnit.MINUTES) // or .MINUTES, .HOURS etc.
+
+
     }
 
     private fun initRecyclerView(binding: ActivityMainBinding) {
@@ -90,5 +118,10 @@ class MainActivity : ComponentActivity() {
         if (progress != null && progress!!.isShowing()) {
             progress!!.dismiss()
         }
+    }
+
+    override fun onDestroy() {
+        scheduleTaskExecutor.shutdown()
+        super.onDestroy()
     }
 }
